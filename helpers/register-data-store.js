@@ -113,15 +113,6 @@ module.exports = require('machine').build({
         if (primaryKeyAttr.required !== true && (!primaryKeyAttr.autoMigrations || primaryKeyAttr.autoMigrations.autoIncrement !== true)) {
           throw flaverr('E_INVALID_PK', new Error('In model `' + modelIdentity + '`, primary key `' + modelDef.primaryKey + '` must have either `required` or `autoIncrement` set.'));
         }
-
-        _.each(modelDef.definition, function checkAttributes(attribute, attributeName) {
-
-          if (attribute.type === 'number' && attribute.autoMigrations && attribute.autoMigrations.columnType === 'bigint' && !attribute.autoCreatedAt && !attribute.autoUpdatedAt) {
-            throw flaverr('E_BIGINT_TYPE_MISMATCH', new Error('\nIn attribute `' + attributeName + '` of model `' + modelIdentity + '`:\nThe `bigint` column type cannot be used with the `number` attribute type.\nSince `bigint` values may be larger than the maximum JavaScript integer size, PostgreSQL will return them as strings.\nTherefore, attributes using this column type must be declared as type `string`, `ref` or `json`.\n'));
-          }
-
-        });
-
       });
     } catch (e) {
       switch (e.code) {
